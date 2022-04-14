@@ -1,58 +1,89 @@
-import datetime
+from datetime import date
+import uuid
 from django.db import models
 from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
 from django.db.models import DO_NOTHING
+from django.urls import reverse
+from django.contrib.auth.models import User
+
+
+class Language(models.Model):
+    language_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.language_name
 
 
 class BookGenre(models.Model):
-    GENRE_CHOICES = (
-        (None, 'Select a Genre:'),
-        ('FY', 'Fantasy'),
-        ('ACT', 'Action'),
-        ('ADV', 'Adventure'),
-        ('CLA', 'Classics'),
-        ('MYS', 'Mystery'),
-        ('HIF', 'Historical Fiction'),
-        ('HOR', 'Horror'),
-        ('NOV', 'Novel'),
-        ('ROM', 'Romance'),
-        ('SCF', 'Sci-fi'),
-        ('EDC', 'Educational'),
-        ('SCI', 'Science'),
-        ('BIO', 'Biography'),
-        ('SHO', 'Short Stories'),
-        ('SUS', 'Suspense'),
-        ('COK', 'Cookbook'),
-        ('HIS', 'History'),
-        ('POE', 'Poetry'),
-        ('SEL', 'Self-help'),
-        ('TRC', 'True crime'),
-        ('CHI', 'Children'),
-        ('GRA', 'Graphic-Novel & Comic Book'),
-        ('ART', 'Art & Photography'),
-        ('TRA', 'Travel & Vacation'),
-        ('HUM', 'Humor'),
-        ('GUI', 'Guide & How-To'),
-        ('REL', 'Religion & Spirituality'),
-        ('HUS', 'Humanities & Social Sciences'),
-        ('PAR', 'Parenting'),
-        ('TEC', 'Technology'),
-        ('NON', 'Non-Fiction'),
-        ('DRA', 'Drama')
-    )
-    item_genre = models.CharField(max_length=3, choices=GENRE_CHOICES)
+    item_genre = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.item_genre
+
+
+class Author(models.Model):
+    author_first_name = models.CharField(max_length=120)
+    author_last_name = models.CharField(max_length=120)
+
+    class Meta:
+        ordering = ['author_last_name', 'author_first_name']
+
+    def get_absolute_url(self):
+        return reverse('author-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return f'{self.author_last_name.capitalize()}, {self.author_first_name}'
 
 
 class Book(models.Model):
-    book_sku = models.IntegerField('SKU')
-    book_launch_year = models.DateTimeField('Date Published')
-    book_acquired_year = models.DateTimeField('Acquisition Date')
-    book_name = models.CharField('Name', max_length=200, unique_for_date=book_launch_year)
-    book_author_input = models.CharField(max_length=200, validators=[validate_comma_separated_integer_list])
-    book_genre = models.ManyToManyField(BookGenre, choices=BookGenre.GENRE_CHOICES)
+    book_isbn = models.CharField('ISBN', max_length=13, unique=True, default=0)
+    book_name = models.CharField('Name', max_length=200)
+    book_author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True)
+    book_genre = models.ManyToManyField(BookGenre, null=True)
+    book_language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
+    book_launch_year = models.DateField('Date Published')
+    book_acquired_year = models.DateField('Acquisition Date')
+    book_description = models.TextField(max_length=1000, null=True, blank=True)
     book_quantity = models.IntegerField('Quantity')
-    book_quantity_available = models.IntegerField('Amount available')
+
+    class Meta:
+        ordering = ['book_name']
+
+    def __str__(self):
+        return self.book_name
+
+    def get_absolute_url(self):
+        return reverse('book-detail', args=[str(self.id)])
+
+    def display_genre(self):
+        return ', '.join([genre.name for genre in self.book_genre.all()[:3]])
+
+    display_genre.short_description = 'Genre'
 
 
-class BookAuthor(models.Model):
-    book_author = models.ManyToManyField(Book)
+class InstanceBook(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
+    book_due_date = models.DateField(null=True, blank=True)
+    book_borrower = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    BOOK_STATUS_CHOICES = (
+        ('ava', 'Available'),
+        ('onl', 'Loaned'),
+        ('una', 'Unavailable')
+    )
+
+    book_status = models.CharField(max_length=10, choices=BOOK_STATUS_CHOICES,
+                                   blank=True, default='ava', help_text='Book Availability')
+
+    @property
+    def is_overdue(self):
+        if self.book_due_date and date.today() > self.book_due_date:
+            return True
+        return False
+
+    class Meta:
+        ordering = ['book_due_date']
+
+    def __str__(self):
+        return f'{self.id} ({self.book.book_name})'
