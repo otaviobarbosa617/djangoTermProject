@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+    <h1>Library Statistics:</h1>
+        <div class="container">
+            <ul class="list-group">
+                <li class="list-group-item">Books amount: {{ num_books }}</li>
+                <li class="list-group-item">Books available: {{ ava_books }}</li>
+                <li class="list-group-item">Books loaned: {{ lon_books }}</li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
