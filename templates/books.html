@@ -13,7 +13,7 @@
                         <h6 class="card-subtitle mb-2 text-muted">By {{ book.book_author }} in {{ book.book_launch_year.year }}</h6>
                     </div>
                       <div class="card-body">
-                        <p class="card-text text-justify">{{ book.book_description}}</p>
+                        <p class="card-text text-justify">{{ book.short_description}}</p>
                         <a href="{% url 'book-detail' book.pk %}" class="btn btn-secondary">View Book Detail</a>
                           <a href="{% url 'book-detail' book.pk %}" class="btn btn-secondary">Add to my Cart</a>
                       </div>

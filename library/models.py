@@ -40,7 +40,7 @@ class Book(models.Model):
     book_name = models.CharField('Name', max_length=200)
     # AFTER finishing, I noticed that this is a logical error: A book can have multiple authors
     book_author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True)
-    book_genre = models.ManyToManyField(BookGenre, null=True)
+    book_genre = models.ManyToManyField(BookGenre, blank=True)
     book_language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
     book_launch_year = models.DateField('Date Published')
     book_acquired_year = models.DateField('Acquisition Date')
@@ -61,6 +61,13 @@ class Book(models.Model):
 
     display_genre.short_description = 'Genre'
 
+    def short_description(self):
+        short_description_len = 200
+        if len(self.book_description) > short_description_len:
+            new_short_desc = self.book_description[:short_description_len] + '...'
+            return new_short_desc
+        else:
+            return self.book_description
 
 class InstanceBook(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)

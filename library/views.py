@@ -1,16 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from .forms import BookForm
-from .models import Book, BookGenre, Author, InstanceBook
 from django.views import generic
+from django.views.generic import CreateView
+from .models import Book, InstanceBook
 
 
 def home(request):
     return render(request, 'home.html')
-
-
-def add_book(request):
-    return render(request, 'addbook.html')
 
 
 def library_stats(request):
@@ -38,6 +33,8 @@ class BookDetailView(generic.DetailView):
     template_name = 'book_detail.html'
 
 
-class FormAddView(generic.FormView):
-    template_name = 'addbook.html'
-    form_class = BookForm
+class BookCreate(CreateView):
+    model = Book
+    fields = ['book_isbn', 'book_name', 'book_author', 'book_genre', 'book_language', 'book_launch_year',
+              'book_acquired_year', 'book_description', 'book_quantity']
+    template_name = 'book_form.html'
