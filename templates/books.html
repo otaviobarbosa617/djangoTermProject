@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="container">
+          <h1>Book List:</h1>
+        {% if book_list %}
+            <div class="card-deck flex-column">
+                {% for book in book_list %}
+                    <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ book.book_name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">By {{ book.book_author }} in {{ book.book_launch_year.year }}</h6>
+                    </div>
+                      <div class="card-body">
+                        <p class="card-text text-justify">{{ book.book_description}}</p>
+                        <a href="{% url 'book-detail' book.pk %}" class="btn btn-secondary">View Book Detail</a>
+                          <a href="{% url 'book-detail' book.pk %}" class="btn btn-secondary">Add to my Cart</a>
+                      </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Genre: {{ book.book_genre.all|join:', '}}</small>
+                        <br>
+                        <small class="text-muted">Language: {{ book.book_language }}</small>
+                    </div>
+                    </div>
+                    <br>
+                {% endfor %}
+            </div>
+      {% else %}
+        <p>There are no books in the library.</p>
+      {% endif %}
+
+    </div>
+{% endblock %}

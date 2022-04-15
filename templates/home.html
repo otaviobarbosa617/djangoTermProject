@@ -4,10 +4,36 @@
     <br>
     <div class="container">
         <h1>Welcome to COMP2152 Library - Term Project</h1>
-        <br>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Add Book</h5>
+                <br>
+        <div class="container">
+            <p>Please make a selection:</p>
+        </div>
+
+        <div class="container">
+            <div class="card-deck flex-column">
+                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
+                    <div class="card-body">
+                        <h5 class="card-title">Add Book</h5>
+                    </div>
+                </div>
+                <a href="{% url 'book-list' %}">
+                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <h5 class="card-title">View Book List</h5>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
+                    <div class="card-body">
+                        <h5 class="card-title">Rent Books</h5>
+                    </div>
+                </div>
+                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
+                    <div class="card-body">
+                        <h5 class="card-title">Library Statistics</h5>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

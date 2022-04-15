@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="container">
+            <h1>Title: {{ book.book_name }}</h1>
+        </div>
+        <br>
+        <div class="container">
+              <p><strong>Author:</strong> <a href="">{{ book.book_author }}</a></p>
+              <p><strong>Summary:</strong> {{ book.book_description}}</p>
+              <p><strong>Published: </strong> {{ book.book_launch_year}}</p>
+            <p><strong>Language:</strong> <a href="">{{ book.book_language }}</a></p>
+              <p><strong>Genre:</strong> <a href="">{{ book.book_genre.all|join:", " }}</a></p>
+                <p><strong>ISBN:</strong> {{ book.book_isbn }}</p>
+            <p><strong>Library Acquisition</strong> {{ book.book_acquired_year }}</p>
+        </div>
+        <hr>
+    <div class="container">
+        <h4>Copies</h4>
+            {% for copy in book.instancebook_set.all %}
+      <hr>
+      <p class="{% if copy.book_status == 'ava' %}text-success{% elif copy.book_status == 'onl' %}text-danger{% else %}text-warning{% endif %}">
+        {{ copy.get_book_status_display }}
+      </p>
+      {% if copy.book_status != 'ava' %}
+        <p><strong>Due to be returned:</strong> {{ copy.book_due_date  }}</p>
+      {% endif %}
+      <p class="text-muted"><strong>ID:</strong> {{ copy.id }}</p>
+    {% endfor %}
+
+    </div>
+    </div>
+{% endblock %}

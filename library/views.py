@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import BookForm
 from .models import Book, BookGenre, Author, InstanceBook
+from django.views import generic
 
 
 def home(request):
@@ -11,12 +12,6 @@ def home(request):
 def add_book(request):
     return render(request, 'addbook.html')
 
-def view_all_books(request):
-    books = Book.objects.all()
-    context = {
-        'book_list': books
-    }
-    return render(request,'booksall.html', context=context)
 
 def library_stats(request):
     num_books = Book.objects.all().count()
@@ -29,3 +24,20 @@ def library_stats(request):
     }
 
     return render(request, 'librarystats.html', context=context)
+
+
+class BookListView(generic.ListView):
+    model = Book
+    context_object_name = 'book_list'
+    queryset = Book.objects.all()
+    template_name = 'books.html'
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
+    template_name = 'book_detail.html'
+
+
+class FormAddView(generic.FormView):
+    template_name = 'addbook.html'
+    form_class = BookForm

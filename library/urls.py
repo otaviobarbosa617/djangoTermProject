@@ -5,7 +5,9 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-    path('addbook',views.add_book, name='addbook'),
-    path('allbooks', views.view_all_books, name='allbooks'),
-    path('librarystats', views.library_stats, name='librarystats')
+    path('book/add_book/', views.add_book, name='addbook'),
+    path('library/stats/', views.library_stats, name='librarystats'),
+    path('book/', views.BookListView.as_view(), name='book-list'),
+    path('book/list/', views.BookListView.as_view(), name='book-list'),
+    path('book/<int:pk>', views.BookDetailView.as_view(), name='book-detail')
 ]

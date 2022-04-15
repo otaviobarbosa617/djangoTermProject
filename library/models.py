@@ -38,6 +38,7 @@ class Author(models.Model):
 class Book(models.Model):
     book_isbn = models.CharField('ISBN', max_length=13, unique=True, default=0)
     book_name = models.CharField('Name', max_length=200)
+    # AFTER finishing, I noticed that this is a logical error: A book can have multiple authors
     book_author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True)
     book_genre = models.ManyToManyField(BookGenre, null=True)
     book_language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
@@ -73,7 +74,7 @@ class InstanceBook(models.Model):
         ('una', 'Unavailable')
     )
 
-    book_status = models.CharField(max_length=10, choices=BOOK_STATUS_CHOICES,
+    book_status = models.CharField(max_length=3, choices=BOOK_STATUS_CHOICES,
                                    blank=True, default='ava', help_text='Book Availability')
 
     @property
