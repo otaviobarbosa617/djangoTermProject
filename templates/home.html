@@ -11,29 +11,27 @@
 
         <div class="container">
             <div class="card-deck flex-column">
-                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
-                    <div class="card-body">
-                        <h5 class="card-title">Add Book</h5>
-                    </div>
-                </div>
-                <a href="{% url 'book-list' %}">
+                <a href="{% url 'book-list' %}" class="text-decoration-none">
                     <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
                         <div class="card-body">
                             <h5 class="card-title">View Book List</h5>
                         </div>
                     </div>
                 </a>
-
+                <a href="{% url 'cart-list' %}" class="text-decoration-none">
                 <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
                     <div class="card-body">
-                        <h5 class="card-title">Rent Books</h5>
+                        <h5 class="card-title">View Cart</h5>
                     </div>
                 </div>
-                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
-                    <div class="card-body">
-                        <h5 class="card-title">Library Statistics</h5>
+                </a>
+                <a href="{% url 'librarystats' %}" class="text-decoration-none">
+                    <div class="card text-white bg-secondary mb-3" style="max-width: 18rem">
+                        <div class="card-body">
+                            <h5 class="card-title">Library Statistics</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>

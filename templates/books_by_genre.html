@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="container">
+            <h1>{{ bookgenre.item_genre }}</h1>
+        </div>
+        <br>
+        <div class="container">
+              <p><strong>Book(s) with {{ bookgenre.item_genre }} as genre on our library:</strong></p>
+            <ul class="list-group">
+            {% for books in bookgenre.get_books_by_genre %}
+                <li class="list-group-item"><a class="btn-link text-decoration-none text-dark"
+                                               href="{% url 'book-detail' books.pk %}">{{ books }}</a></li>
+            {% endfor %}
+
+            </ul>
+        </div>
+        <hr>
+    </div>
+{% endblock %}

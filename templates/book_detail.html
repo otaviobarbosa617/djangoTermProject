@@ -4,15 +4,17 @@
     <br>
     <div class="container">
         <div class="container">
-            <h1>Title: {{ book.book_name }}</h1>
+            <h1>{{ book.book_name }}</h1>
         </div>
         <br>
         <div class="container">
-              <p><strong>Author:</strong> <a href="">{{ book.book_author }}</a></p>
+              <p><strong>Author:</strong> <a href="{% url 'author-detail' book.book_author.pk %}" class="text-dark text-decoration-none">{{ book.book_author }}</a></p>
               <p><strong>Summary:</strong> {{ book.book_description}}</p>
               <p><strong>Published: </strong> {{ book.book_launch_year}}</p>
-            <p><strong>Language:</strong> <a href="">{{ book.book_language }}</a></p>
-              <p><strong>Genre:</strong> <a href="">{{ book.book_genre.all|join:", " }}</a></p>
+            <p><strong>Language:</strong> {{ book.book_language }}</p>
+              <p><strong>Genre:</strong>
+                {{ book.display_genre }}
+              </p>
                 <p><strong>ISBN:</strong> {{ book.book_isbn }}</p>
             <p><strong>Library Acquisition</strong> {{ book.book_acquired_year }}</p>
         </div>

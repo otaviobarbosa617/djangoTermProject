@@ -3,10 +3,10 @@
 {% block content %}
     <br>
     <div class="container">
-          <h1>Book List:</h1>
-        {% if book_list %}
+          <h1>Cart</h1>
+        {% if cart_list %}
             <div class="card-deck flex-column">
-                {% for book in book_list %}
+                {% for book in object_list %}
                     <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">{{ book.book_name}}</h5>

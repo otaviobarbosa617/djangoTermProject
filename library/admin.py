@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Author, BookGenre, Book, InstanceBook, Language
+from .models import Author, BookGenre, Book, InstanceBook, Language, Cart
 
 # Register your models here.
 
@@ -23,3 +23,4 @@ class AuthorAdmin(admin.ModelAdmin):
 
 admin.site.register(Book)
 admin.site.register(InstanceBook)
+admin.site.register(Cart)

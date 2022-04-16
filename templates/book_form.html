@@ -1,15 +1,16 @@
+{## This is for a future separation between admin and a regular user. #}
+{## For now, if you want to add book, you can add through admin page#}
 
-{% extends "base.html" %}
 
-{% block content %}
-
-<form action="" method="post">
-    {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    </table>
-    <input type="submit" value="Submit" />
-
-</form>
-{% endblock %}
+{#{% extends "base.html" %}#}
+{##}
+{#{% block content %}#}
+{##}
+{#<form action="" method="post">#}
+{#    {% csrf_token %}#}
+{#    {{ form.as_p }}#}
+{#    <input type="submit" value="Submit" />#}
+{##}
+{#</form>#}
+{#{% endblock %}#}
 

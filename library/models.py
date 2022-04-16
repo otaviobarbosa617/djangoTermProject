@@ -1,10 +1,20 @@
-from datetime import date
+from datetime import date, datetime
 import uuid
 from django.db import models
-from django.core.validators import MinValueValidator, validate_comma_separated_integer_list
-from django.db.models import DO_NOTHING
 from django.urls import reverse
 from django.contrib.auth.models import User
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    creation_date = models.DateTimeField(default=datetime.now)
+    checked_out = models.BooleanField(default=False, verbose_name='checked out')
+
+    class Meta:
+        ordering = ('-creation_date',)
+
+    def get_books_in_cart(self):
+        return Book.objects.filter(cart=self)
 
 
 class Language(models.Model):
@@ -13,12 +23,24 @@ class Language(models.Model):
     def __str__(self):
         return self.language_name
 
+    def get_books_by_language(self):
+        return Book.objects.filter(book_language=self)
+
 
 class BookGenre(models.Model):
     item_genre = models.CharField(max_length=20)
 
     def __str__(self):
         return self.item_genre
+
+    class Meta:
+        ordering = ['item_genre']
+
+    def get_books_by_genre(self):
+        return Book.objects.filter(book_genre=self)
+
+    def get_absolute_url(self):
+        return reverse('book-list-genre', args=[str(self.id)])
 
 
 class Author(models.Model):
@@ -34,6 +56,9 @@ class Author(models.Model):
     def __str__(self):
         return f'{self.author_last_name.capitalize()}, {self.author_first_name}'
 
+    def get_books_by_author(self):
+        return Book.objects.filter(book_author=self)
+
 
 class Book(models.Model):
     book_isbn = models.CharField('ISBN', max_length=13, unique=True, default=0)
@@ -46,6 +71,7 @@ class Book(models.Model):
     book_acquired_year = models.DateField('Acquisition Date')
     book_description = models.TextField(max_length=1000, null=True, blank=True)
     book_quantity = models.IntegerField('Quantity')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ['book_name']
@@ -57,7 +83,7 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
     def display_genre(self):
-        return ', '.join([genre.name for genre in self.book_genre.all()[:3]])
+        return ', '.join([genre.item_genre for genre in self.book_genre.all()[:3]])
 
     display_genre.short_description = 'Genre'
 
@@ -68,6 +94,7 @@ class Book(models.Model):
             return new_short_desc
         else:
             return self.book_description
+
 
 class InstanceBook(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="container">
+            <h1>{{ author.author_first_name }} {{ author.author_last_name }}</h1>
+        </div>
+        <br>
+        <div class="container">
+              <p><strong>Author's book(s) on our library:</strong></p>
+            <ul class="list-group">
+            {% for books in author.get_books_by_author %}
+                <li class="list-group-item"><a class="btn-link text-decoration-none text-dark" href="{% url 'book-detail' books.pk %}">{{ books }}</a></li>
+            {% endfor %}
+
+            </ul>
+        </div>
+        <hr>
+    </div>
+{% endblock %}
